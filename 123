@@ -2,204 +2,209 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+
 public class StudentRecorder extends JFrame implements ActionListener {
-	private JTextField userField, studNotField, frNameField, mdNameField, lsNameField, preGradeField, midGradeField, finGradeField, degrField;
-	private JPasswordField passField;
-	private JComboBox<String> yrLevelBox, genderBox;
-	private JButton regButton;
-	private JLabel finGradeLabel;
-	
-	private BufferedWriter writer;
-	private BufferedReader reader;
-	
-	public StudentRecorder () {
-		setTitle("Student Record Management Program");
-		setSize(400,450);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
-		
-		JPanel panel = new JPanel();
-		panel.setLayout(new GridLayout(14, 2));
-		
-		panel.add(new JLabel("Username: "));
-		userField = new JTextField();
-		panel.add(userField);
-		
-		panel.add(new JLabel("Password: "));
-		passField = new JPasswordField();
-		panel.add(passField);
-		
-		panel.add(new JLabel("Student No: "));
-		studNotField = new JTextField();
-		panel.add(studNotField);
-		
-		panel.add(new JLabel("Degree: "));
-		degrField = new JTextField();
-		panel.add(degrField);
-		
-		panel.add(new JLabel ("Year Level: "));
-		String [] yearLevels = {"Freshman", "Sophomore", "Junior", "Senior"};
-		yrLevelBox = new JComboBox<>(yearLevels);
-		
-		panel.add(new JLabel ("First Name: "));
-		frNameField = new JTextField();
-		panel.add(frNameField);
-		
-		panel.add(new JLabel ("Middle Name: "));
-		mdNameField = new JTextField();
-		panel.add(mdNameField);
-		
-		panel.add(new JLabel ("Last Name: "));
-		lsNameField = new JTextField();
-		panel.add(lsNameField);
-		
-		panel.add(new JLabel ("Gender: " ));
-		String[] genders = {"Male", "Female", "Custom"};
-		genderBox = new JComboBox<>(genders);
-		panel.add(genderBox);
-		
-		panel.add(new JLabel ("Prelim Grade: "));
-		preGradeField = new JTextField();
-		panel.add(preGradeField);
-		
-		panel.add(new JLabel ("Midterm Grade: "));
-		midGradeField = new JTextField();
-		panel.add(midGradeField);
-		
-		panel.add(new JLabel ("Final Grade: "));
-		finGradeField = new JTextField();
-		panel.add(finGradeField);
-		
-		panel.add(new JLabel("(Final Term Grade in File)"));
-		finGradeLabel = new JLabel();
-		panel.add(finGradeLabel);
-		
-		panel.add(new JLabel(""));
-		regButton = new JButton("Register");
-		regButton .addActionListener(this);
-		panel.add(regButton);
-		
-		add(panel);
-		setVisible(true);
-		
-		try {
-			writer = new BufferedWriter(new FileWriter("studentRec1.txt", true));
-			reader = new BufferedReader(new FileReader("studentRec1.txt"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void actionPerformed(ActionEvent e ) {
-		if (e.getSource()== regButton) {
-			String user = userField.getText();
-			String pass = new String(passField.getPassword());
-			String studNo = studNotField.getText();
-			String degr = degrField.getText();
-			String year = (String)yrLevelBox.getSelectedItem();
-			String first = frNameField.getText();
-			String middle = mdNameField.getText();
-			String last = lsNameField.getText();
-			String gender = (String)genderBox.getSelectedItem();
-			double prelimG = Double.parseDouble(preGradeField.getText());
-			double midtermG = Double.parseDouble(midGradeField.getText());
-			double finalG = Double.parseDouble(finGradeField.getText());
-			double finalTG = (prelimG + midtermG + finalG) / 3;
-			
-			try {
-				writeTostudentRec1("Username: " + user);
-				writeTostudentRec1("Password: " + pass);
-				writeTostudentRec1("Student No: " + studNo);
-				writeTostudentRec1("Degree: " + degr);
-				writeTostudentRec1("Year Level: " + year);
-				writeTostudentRec1("First Name: " + first);
-				writeTostudentRec1("Middle Name: " + middle);
-				writeTostudentRec1("Last Name: " + last);
-				writeTostudentRec1("Gender: " + gender);
-				writeTostudentRec1("Prelim Grade: " + prelimG);
-				writeTostudentRec1("Midterm Grade: " + midtermG);
-				writeTostudentRec1("Final Grade: " + finalG);
-				writeTostudentRec1("");
-				JOptionPane.showMessageDialog(this, "Registration Successful!");
-				clearFields();
-				
-				displayQuitContinueMessage();
-			}catch (IOException ex) {
-				ex.printStackTrace();
-			}
-		}
-	}
-	
-	private void writeTostudentRec1(String data) throws IOException {
-		writer.write(data);
-		writer.newLine();
-		writer.flush();
-	}
-	private void clearFields() {
-		userField.setText("");
-		passField.setText("");
-		studNotField.setText("");
-		yrLevelBox.setSelectedIndex(0);
-		frNameField.setText("");
-		mdNameField.setText("");
-		lsNameField.setText("");
-		genderBox.setSelectedIndex(0);
-		preGradeField.setText("");
-		midGradeField.setText("");
-		finGradeField.setText("");
-		finGradeLabel.setText("");
-	}
-	
-	private void writeToStudentRec2() {
-		try {
-			BufferedWriter forStudeRec2 = new BufferedWriter(new FileWriter("studentRec2.txt"));
-			forStudeRec2.write("Exception Handling, File Handling, and Object and Classes used in the code: ");
-			forStudeRec2.newLine();
-			forStudeRec2.write("- Exception Handling: This program handles IOException when reading from and writing to files. ");
-			forStudeRec2.newLine();
-			forStudeRec2.write("- File Handling: The program uses file handling like BufferedReader, BufferedWriter, FileReader and FileWriter to read and write student records. ");
-			forStudeRec2.newLine();
-			forStudeRec2.write("- Object and Classes: The main class is the StudentRecorder which also contains the main method, it contains all necessary information for the code to run. Other sub classes are used to denote different function and uses like writeToStudeRec2, clearfields, etc. Swing Components are also used such as the JFrame, JLabel, and JButton.");
-			forStudeRec2.newLine();
-			forStudeRec2.close();
-		}catch (IOException e){
-			e.printStackTrace();
-		}
-	}
-	public void run() {
-		writeToStudentRec2();
-		
-		try {
-			String line;
-			System.out.println("Existing records: ");
-			while ((line = reader.readLine())!=null) {
-				System.out.println(line);
-			}
-			System.out.println();
-		}catch (IOException e ) {
-			e.printStackTrace();
-		}
-	}
-	private void displayQuitContinueMessage() {
-		String input = JOptionPane.showInputDialog(null, "Enter 'Q' to quit or 'C' to continue inputting information: ");
-		if(input != null) {
-			if (input.equalsIgnoreCase("C")) {
-				run();
-			}else if (input.equalsIgnoreCase("Q")) {
-				System.exit(0);
-			}else {
-				JOptionPane.showMessageDialog(null, "Invalid input! Program will exit.");
-				System.exit(0);
-			}
-		}
-	}
-	
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				StudentRecorder recorder = new StudentRecorder();
-				recorder.run();
-			}
-		}
-	}
+    private JTextField userField, studNotField, frNameField, mdNameField, lsNameField, preGradeField, midGradeField, finGradeField, degrField;
+    private JPasswordField passField;
+    private JComboBox<String> yrLevelBox, genderBox;
+    private JButton regButton;
+    private JLabel finGradeLabel;
+
+    private BufferedWriter writer;
+    private BufferedReader reader;
+
+    public StudentRecorder() {
+        setTitle("Student Record Management Program");
+        setSize(400, 450);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(14, 2));
+
+        panel.add(new JLabel("Username: "));
+        userField = new JTextField();
+        panel.add(userField);
+
+        panel.add(new JLabel("Password: "));
+        passField = new JPasswordField();
+        panel.add(passField);
+
+        panel.add(new JLabel("Student No: "));
+        studNotField = new JTextField();
+        panel.add(studNotField);
+
+        panel.add(new JLabel("Degree: "));
+        degrField = new JTextField();
+        panel.add(degrField);
+
+        panel.add(new JLabel("Year Level: "));
+        String[] yearLevels = {"Freshman", "Sophomore", "Junior", "Senior"};
+        yrLevelBox = new JComboBox<>(yearLevels);
+        panel.add(yrLevelBox);
+
+        panel.add(new JLabel("First Name: "));
+        frNameField = new JTextField();
+        panel.add(frNameField);
+
+        panel.add(new JLabel("Middle Name: "));
+        mdNameField = new JTextField();
+        panel.add(mdNameField);
+
+        panel.add(new JLabel("Last Name: "));
+        lsNameField = new JTextField();
+        panel.add(lsNameField);
+
+        panel.add(new JLabel("Gender: "));
+        String[] genders = {"Male", "Female", "Custom"};
+        genderBox = new JComboBox<>(genders);
+        panel.add(genderBox);
+
+        panel.add(new JLabel("Prelim Grade: "));
+        preGradeField = new JTextField();
+        panel.add(preGradeField);
+
+        panel.add(new JLabel("Midterm Grade: "));
+        midGradeField = new JTextField();
+        panel.add(midGradeField);
+
+        panel.add(new JLabel("Final Grade: "));
+        finGradeField = new JTextField();
+        panel.add(finGradeField);
+
+        panel.add(new JLabel("(Final Term Grade in File)"));
+        finGradeLabel = new JLabel();
+        panel.add(finGradeLabel);
+
+        panel.add(new JLabel(""));
+        regButton = new JButton("Register");
+        regButton.addActionListener(this);
+        panel.add(regButton);
+
+        add(panel);
+        setVisible(true);
+
+        try {
+            writer = new BufferedWriter(new FileWriter("studentRec1.txt", true));
+            reader = new BufferedReader(new FileReader("studentRec1.txt"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == regButton) {
+            String user = userField.getText();
+            String pass = new String(passField.getPassword());
+            String studNo = studNotField.getText();
+            String degr = degrField.getText();
+            String year = (String) yrLevelBox.getSelectedItem();
+            String first = frNameField.getText();
+            String middle = mdNameField.getText();
+            String last = lsNameField.getText();
+            String gender = (String) genderBox.getSelectedItem();
+            double prelimG = Double.parseDouble(preGradeField.getText());
+            double midtermG = Double.parseDouble(midGradeField.getText());
+            double finalG = Double.parseDouble(finGradeField.getText());
+            double finalTG = (prelimG + midtermG + finalG) / 3;
+
+            try {
+                writeToStudentRec1("Username: " + user);
+                writeToStudentRec1("Password: " + pass);
+                writeToStudentRec1("Student No: " + studNo);
+                writeToStudentRec1("Degree: " + degr);
+                writeToStudentRec1("Year Level: " + year);
+                writeToStudentRec1("First Name: " + first);
+                writeToStudentRec1("Middle Name: " + middle);
+                writeToStudentRec1("Last Name: " + last);
+                writeToStudentRec1("Gender: " + gender);
+                writeToStudentRec1("Prelim Grade: " + prelimG);
+                writeToStudentRec1("Midterm Grade: " + midtermG);
+                writeToStudentRec1("Final Grade: " + finalG);
+                writeToStudentRec1("");
+                JOptionPane.showMessageDialog(this, "Registration Successful!");
+                clearFields();
+
+                displayQuitContinueMessage();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    private void writeToStudentRec1(String data) throws IOException {
+        writer.write(data);
+        writer.newLine();
+        writer.flush();
+    }
+
+    private void clearFields() {
+        userField.setText("");
+        passField.setText("");
+        studNotField.setText("");
+        yrLevelBox.setSelectedIndex(0);
+        frNameField.setText("");
+        mdNameField.setText("");
+        lsNameField.setText("");
+        genderBox.setSelectedIndex(0);
+        preGradeField.setText("");
+        midGradeField.setText("");
+        finGradeField.setText("");
+        finGradeLabel.setText("");
+    }
+
+    private void writeToStudentRec2() {
+        try {
+            BufferedWriter forStudeRec2 = new BufferedWriter(new FileWriter("studentRec2.txt"));
+            forStudeRec2.write("Exception Handling, File Handling, and Object and Classes used in the code: ");
+            forStudeRec2.newLine();
+            forStudeRec2.write("- Exception Handling: This program handles IOException when reading from and writing to files. ");
+            forStudeRec2.newLine();
+            forStudeRec2.write("- File Handling: The program uses file handling like BufferedReader, BufferedWriter, FileReader, and FileWriter to read and write student records. ");
+            forStudeRec2.newLine();
+            forStudeRec2.write("- Object and Classes: The main class is the StudentRecorder which also contains the main method. It contains all the necessary information for the code to run. Other sub-classes are used to denote different functions and uses like writeToStudentRec2, clearFields, etc. Swing Components are also used such as JFrame, JLabel, and JButton.");
+            forStudeRec2.newLine();
+            forStudeRec2.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void run() {
+        writeToStudentRec2();
+
+        try {
+            String line;
+            System.out.println("Existing records: ");
+            while ((line = reader.readLine()) != null) {
+                System.out.println(line);
+            }
+            System.out.println();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void displayQuitContinueMessage() {
+        String input = JOptionPane.showInputDialog(null, "Enter 'Q' to quit or 'C' to continue inputting information: ");
+        if (input != null) {
+            if (input.equalsIgnoreCase("C")) {
+                run();
+            } else if (input.equalsIgnoreCase("Q")) {
+                System.exit(0);
+            } else {
+                JOptionPane.showMessageDialog(null, "Invalid input! Program will exit.");
+                System.exit(0);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                StudentRecorder recorder = new StudentRecorder();
+                recorder.run();
+            }
+        });
+    }
 }
